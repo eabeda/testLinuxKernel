@@ -1,4 +1,4 @@
 #! /bin/sh
 
 #Git
-https://github.com/torvalds/linux.git
+git clone https://github.com/torvalds/linux.git
