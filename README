@@ -4,3 +4,46 @@ git commit -m "first commit"
 git remote add origin https://github.com/eabeda/testLinuxKernel.git
 git push -u origin master
 
+QEMU
+sudo apt install qemu
+
+https://nostillsearching.wordpress.com/2012/09/22/compiling-linux-kernel-and-running-it-using-qemu/
+
+cd ~/git/linux/
+make clean
+make distclean
+make defconfig
+make bzImage/all
+make modules
+ls -l arch/x86/boot/bzImage
+cd arch/x86/boot/
+mkinitramfs -o initrd.img-$(uname -r)
+qemu-system-x86_64 -kernel bzImage -initrd initrd.img-$(uname -r) -m 512M
+
+Eclipse
+Project->proprities->C/C++ Build->Behavior->Build : defconfig modules bzImage
+Project->proprities->C/C++ Build->Behavior->Clean : clean distclean
+
+https://raspberrypi.stackexchange.com/questions/192/how-do-i-cross-compile-the-kernel-on-a-ubuntu-host
+
+Cross compilation
+make ARCH=arm CROSS_COMPILE=/usr/bin/arm-linux-gnueabi- defconfig modules bzImage
+Or
+make ARCH=arm CROSS_COMPILE=/usr/bin/arm-linux-gnueabi- -k
+
+$ file arch/arm/boot/zImage
+arch/arm/boot/zImage: Linux kernel ARM boot executable zImage (little-endian)
+
+cd arch/arm/boot/
+mkinitramfs -o initrd.img-$(uname -r)
+
+but fails
+qemu-system-arm -kernel zImage -initrd initrd.img-$(uname -r) -m 512M -machine virt
+
+ROOTFS
+$ qemu-system-i386 -h | grep root
+-chroot dir     chroot to dir just before starting the VM
+$ qemu-system-i386 -h | grep fs
+-fsdev fsdriver,id=id[,path=path,][security_model={mapped-xattr|mapped-file|passthrough|none}]
+-virtfs local,path=path,mount_tag=tag,security_model=[mapped-xattr|mapped-file|passthrough|none]
+-virtfs_synth Create synthetic file system image
