@@ -17,7 +17,7 @@ defconfig:
 bzImage:
 	make $@ -C linux
 
-bImage:
+zImage:
 	make $@ -C linux
 
 modules:
